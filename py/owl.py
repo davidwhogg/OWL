@@ -241,7 +241,7 @@ def savefig(fn):
     plt.savefig(fn)
 
 def get_kepler_data(kicid, quarter, makeplots=True):
-    prefix = "kic_%08d_%02d" % (kicid, quarter)
+    prefix = "./plots/kic_%08d_%02d" % (kicid, quarter)
     title = "KIC %08d Q%02d" % (kicid, quarter)
     tpf = get_kepler_target_pixel_file(kicid, quarter)
     with tpf.open() as hdu:
@@ -262,7 +262,7 @@ def get_k2_data():
     * Everything hard-coded!
     * Hacks to remove bad data
     """
-    prefix = "K2_target"
+    prefix = "./plots/K2_target"
     title = "@MrTommyB's K2 target"
     tpf = kplr.TargetPixelFile.local("../data/kplr060017806-2014044044430_lpd-targ.fits") # MAGIC
     with tpf.open() as hdu:
@@ -307,7 +307,7 @@ def photometer_and_plot(kicid, quarter, fake=False, makeplots=True, k2=False):
     """
     fsf = 2.5 # MAGIC number used to stretch plots
     if fake:
-        prefix = "fake"
+        prefix = "./plots/fake"
         title = "fake data"
         intensities, kplr_mask = get_fake_data(4700)
         time_in_kbjd = np.arange(len(intensities)) / 24. / 2.
@@ -539,10 +539,34 @@ def photometer_and_plot(kicid, quarter, fake=False, makeplots=True, k2=False):
     # phone home
     return time_in_kbjd, sap_lightcurve, owl_lightcurve
 
+def morehead(quarter):
+    kicids = [
+        10124866,
+        3544595,
+        5774694,
+        10593626,
+        3545135,
+        4815520,
+        8753657,
+        8552719,
+        11600889,
+        11075737,
+        3442055,
+        10130039,
+        7211221,
+        11446443,
+        3335426]
+    for kicid in kicids:
+        t, s, o = photometer_and_plot(kicid, quarter)
+    return None
+
 if __name__ == "__main__":
     import sys
     np.random.seed(42)
     quarter = 5
+    morehead(quarter)
+
+if False:
     kicid = 3335426
     if len(sys.argv) > 1:
         kicid = int(sys.argv[1])
