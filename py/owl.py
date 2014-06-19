@@ -288,7 +288,7 @@ def get_k2_data():
     print np.where(kplr_mask == 3)
     return time_in_kbjd, intensities, kplr_mask, prefix, title
 
-def photometer_and_plot(kicid, quarter, fake=False, makeplots=True, k2=True):
+def photometer_and_plot(kicid, quarter, fake=False, makeplots=True, k2=False):
     """
     ## inputs:
     - `kicid` - KIC number
@@ -315,7 +315,7 @@ def photometer_and_plot(kicid, quarter, fake=False, makeplots=True, k2=True):
         time_in_kbjd, intensities, kplr_mask, prefix, title = get_k2_data()
         tb_output = np.loadtxt("../data/wasp28_lc_tom.txt").T
     else:
-        time_in_kbjd, intensities, kplr_mask, prefix, title = get_kplr_data(kicid, quarter, makeplots=makeplots)
+        time_in_kbjd, intensities, kplr_mask, prefix, title = get_kepler_data(kicid, quarter, makeplots=makeplots)
     nt, ny, nx = intensities.shape
 
     # get SAP weights and photometry
@@ -548,12 +548,10 @@ if __name__ == "__main__":
         kicid = int(sys.argv[1])
     if len(sys.argv) > 2:
         quarter = int(sys.argv[2])
-    if len(sys.argv) > 1:
-        t, s, o = photometer_and_plot(kicid, quarter)
-    else:
-        t, s, o = photometer_and_plot(kicid, quarter, k2=True)
+    t, s, o = photometer_and_plot(kicid, quarter)
 
     if False: # 
+        t, s, o = photometer_and_plot(kicid, quarter, k2=True)
         t, s, o = photometer_and_plot(kicid, quarter, fake=True)
         kicid = 8692861
         t, s, o = photometer_and_plot(kicid, quarter)
